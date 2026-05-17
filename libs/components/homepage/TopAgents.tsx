@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import { Stack, Box } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
+import { useQuery } from '@apollo/client';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Box, Stack } from '@mui/material';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
-import TopAgentCard from './TopAgentCard';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { GET_AGENTS } from '../../../apollo/user/query';
+import useDeviceDetect from '../../hooks/useDeviceDetect';
+import { T } from '../../types/common';
 import { Member } from '../../types/member/member';
 import { AgentsInquiry } from '../../types/member/member.input';
+import TopAgentCard from './TopAgentCard';
 
 interface TopAgentsProps {
 	initialInput: AgentsInquiry;
@@ -20,6 +23,21 @@ const TopAgents = (props: TopAgentsProps) => {
 	const [topAgents, setTopAgents] = useState<Member[]>([]);
 
 	/** APOLLO REQUESTS **/
+	const {
+					loading: getAgentsLoading,
+					error: getAgentsError,
+					data: getAgentsData,
+					refetch: getAgentsRefetch,
+				 } = useQuery(GET_AGENTS, {
+					fetchPolicy: 'cache-and-network',
+					variables: {
+						input: initialInput
+					},
+					notifyOnNetworkStatusChange: true,
+					onCompleted: (data: T) => {
+						setTopAgents(data?.getAgents?.list);
+				 },
+				});
 	/** HANDLERS **/
 
 	if (device === 'mobile') {

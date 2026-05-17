@@ -1,10 +1,13 @@
+import { useQuery } from '@apollo/client';
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
 import { Box, Stack } from '@mui/material';
 import { useState } from 'react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { GET_PROPERTIES } from '../../../apollo/user/query';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
+import { T } from '../../types/common';
 import { Property } from '../../types/property/property';
 import { PropertiesInquiry } from '../../types/property/property.input';
 import TopPropertyCard from './TopPropertyCard';
@@ -19,6 +22,21 @@ const TopProperties = (props: TopPropertiesProps) => {
 	const [topProperties, setTopProperties] = useState<Property[]>([]);
 
 	/** APOLLO REQUESTS **/
+	const {
+					loading: getPropertiesLoading,
+					error: getPropertiesError,
+					data: getPropertiesData,
+					refetch: getPropertiesRefetch,
+				 } = useQuery(GET_PROPERTIES, {
+					fetchPolicy: 'cache-and-network',
+					variables: {
+						input: initialInput
+					},
+					notifyOnNetworkStatusChange: true,
+					onCompleted: (data: T) => {
+						setTopProperties(data?.getProperties?.list);
+				 },
+				});
 	/** HANDLERS **/
 
 	if (device === 'mobile') {
