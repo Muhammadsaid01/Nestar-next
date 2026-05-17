@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Stack, Box } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
-import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import WestIcon from '@mui/icons-material/West';
+import { Box, Stack } from '@mui/material';
+import { useState } from 'react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
-import TopPropertyCard from './TopPropertyCard';
-import { PropertiesInquiry } from '../../types/property/property.input';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Property } from '../../types/property/property';
+import { PropertiesInquiry } from '../../types/property/property.input';
+import TopPropertyCard from './TopPropertyCard';
 
 interface TopPropertiesProps {
 	initialInput: PropertiesInquiry;
