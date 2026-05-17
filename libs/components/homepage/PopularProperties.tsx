@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { Stack, Box } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Pagination } from 'swiper';
-import WestIcon from '@mui/icons-material/West';
+import { useQuery } from '@apollo/client';
 import EastIcon from '@mui/icons-material/East';
-import PopularPropertyCard from './PopularPropertyCard';
-import { Property } from '../../types/property/property';
+import WestIcon from '@mui/icons-material/West';
+import { Box, Stack } from '@mui/material';
 import Link from 'next/link';
+import { useState } from 'react';
+import { Autoplay, Navigation, Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { GET_PROPERTIES } from '../../../apollo/user/query';
+import useDeviceDetect from '../../hooks/useDeviceDetect';
+import { T } from '../../types/common';
+import { Property } from '../../types/property/property';
 import { PropertiesInquiry } from '../../types/property/property.input';
+import PopularPropertyCard from './PopularPropertyCard';
 
 interface PopularPropertiesProps {
 	initialInput: PropertiesInquiry;
@@ -20,6 +23,21 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 	const [popularProperties, setPopularProperties] = useState<Property[]>([]);
 
 	/** APOLLO REQUESTS **/
+	const {
+					loading: getPropertiesLoading,
+					error: getPropertiesError,
+					data: getPropertiesData,
+					refetch: getPropertiesRefetch,
+				 } = useQuery(GET_PROPERTIES, {
+					fetchPolicy: 'cache-and-network',
+					variables: {
+						input: initialInput
+					},
+					notifyOnNetworkStatusChange: true,
+					onCompleted: (data: T) => {
+						setPopularProperties(data?.getProperties?.list);
+				 },
+				});
 	/** HANDLERS **/
 
 	if (!popularProperties) return null;
