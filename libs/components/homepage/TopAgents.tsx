@@ -1,43 +1,38 @@
-import { useQuery } from '@apollo/client';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { Box, Stack } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { Autoplay, Navigation, Pagination } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { GET_AGENTS } from '../../../apollo/user/query';
+import { Stack, Box } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { T } from '../../types/common';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Navigation, Pagination } from 'swiper';
+import TopAgentCard from './TopAgentCard';
 import { Member } from '../../types/member/member';
 import { AgentsInquiry } from '../../types/member/member.input';
-import TopAgentCard from './TopAgentCard';
+import { GET_AGENTS } from '../../../apollo/user/query';
+import { useQuery } from '@apollo/client';
+import { T } from '../../types/common';
 
 interface TopAgentsProps {
 	initialInput: AgentsInquiry;
 }
 
 const TopAgents = (props: TopAgentsProps) => {
-	const { initialInput } = props;
-	const device = useDeviceDetect();
-	const router = useRouter();
-	const [topAgents, setTopAgents] = useState<Member[]>([]);
+    const { initialInput } = props;
+    const device = useDeviceDetect();
+    const [topAgents, setTopAgents] = useState<Member[]>([]);
 
-	/** APOLLO REQUESTS **/
-	const {
-					loading: getAgentsLoading,
-					error: getAgentsError,
-					data: getAgentsData,
-					refetch: getAgentsRefetch,
-				 } = useQuery(GET_AGENTS, {
-					fetchPolicy: 'cache-and-network',
-					variables: {
-						input: initialInput
-					},
-					notifyOnNetworkStatusChange: true,
-					onCompleted: (data: T) => {
-						setTopAgents(data?.getAgents?.list);
-				 },
-				});
+    const {
+        loading: getAgentsLoading,
+        data: getAgentsData,
+        error: getAgentsError,
+    } = useQuery(GET_AGENTS, {
+        fetchPolicy: 'cache-and-network',
+        variables: { input: initialInput },
+        notifyOnNetworkStatusChange: true,
+        onCompleted: (data: T) => {
+            setTopAgents(data?.getAgents?.list);
+        },
+    });
 	/** HANDLERS **/
 
 	if (device === 'mobile') {
@@ -118,13 +113,13 @@ const TopAgents = (props: TopAgentsProps) => {
 };
 
 TopAgents.defaultProps = {
-	initialInput: {
-		page: 1,
-		limit: 10,
-		sort: 'memberRank',
-		direction: 'DESC',
-		search: {},
-	},
+    initialInput: {
+        page: 1,
+        limit: 10,
+        sort: 'memberRank',
+        direction: 'DESC',
+        search: {},
+    },
 };
 
 export default TopAgents;

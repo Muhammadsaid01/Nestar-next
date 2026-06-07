@@ -250,7 +250,7 @@ const Top = () => {
 									<MenuItem disableRipple onClick={langChoice} id="en">
 										<img
 											className="img-flag"
-											src={'/img/flag/langen.png'}
+											src={'/img/en.png'}
 											onClick={langChoice}
 											id="en"
 											alt={'usaFlag'}
@@ -262,7 +262,7 @@ const Top = () => {
 											className="img-flag"
 											src={'/img/flag/langkr.png'}
 											onClick={langChoice}
-											id="uz"
+											id="kr"
 											alt={'koreanFlag'}
 										/>
 										{t('Korean')}
@@ -272,8 +272,8 @@ const Top = () => {
 											className="img-flag"
 											src={'/img/flag/langru.png'}
 											onClick={langChoice}
-											id="ru"
-											alt={'russiaFlag'}
+											id="uz"
+											alt={'uzbekFlag'}
 										/>
 										{t('Russian')}
 									</MenuItem>
